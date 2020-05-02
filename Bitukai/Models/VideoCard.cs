@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Bitukai.Models.Components
+﻿namespace Bitukai.Models
 {
-    public class VideoCard
+    public class VideoCard: Component
     {
+        public string ChipSet { get; set; }
+        public string MemoryType { get; set; }
+        public int MemoryGb { get; set; }
+        public int CoreClockMhz { get; set; }
+        public string Interface { get; set; }
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Bitukai.Models.Enums
+﻿namespace Bitukai.Models.Enums
 {
-    public class PSUModularity
+    public enum PSUModularity
     {
+        Full,
+        Semi,
+        No
     }
 }

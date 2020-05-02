@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Bitukai.Models.Components
+﻿namespace Bitukai.Models
 {
-    public class Ram
+    public class Ram: Component
     {
+        public int CapacityGb { get; set; }
+        public byte ModuleCount { get; set; }
+        public string DdrType { get; set; }
+        public int SpeedMhz { get; set; }
+        public int CasLatency { get; set; }
+        public string Type { get; set; }
     }
 }

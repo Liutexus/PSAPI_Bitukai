@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Bitukai.Models.Components
+﻿namespace Bitukai.Models
 {
-    public class Storage
+    public class Storage: Component
     {
+        public int CapacityGb { get; set; }
+        public string Type { get; set; }
+        public int CacheMb { get; set; }
+        public string FormFactor { get; set; }
+        public string Interface { get; set; }
     }
 }
