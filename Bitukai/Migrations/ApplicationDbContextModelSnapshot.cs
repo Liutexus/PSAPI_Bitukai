@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Bitukai.Data.Migrations
+namespace Bitukai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -33,6 +33,13 @@ namespace Bitukai.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Processors"
+                        });
                 });
 
             modelBuilder.Entity("Bitukai.Models.Component", b =>
@@ -42,13 +49,11 @@ namespace Bitukai.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AlternativeIds")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ComponentId")
                         .HasColumnType("int");
@@ -342,6 +347,7 @@ namespace Bitukai.Data.Migrations
                         {
                             Id = 1,
                             AlternativeIds = "",
+                            CategoryId = 1,
                             Manufacturer = "Intel",
                             Name = "Core i5-2134",
                             CoreClockGhz = 2.3f,
@@ -354,6 +360,7 @@ namespace Bitukai.Data.Migrations
                         {
                             Id = 2,
                             AlternativeIds = "1",
+                            CategoryId = 1,
                             Manufacturer = "AMD",
                             Name = "Ryzen 7 3700",
                             CoreClockGhz = 3.7f,

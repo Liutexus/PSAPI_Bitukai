@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Bitukai.Data.Migrations
+namespace Bitukai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200502124315_SeedProcessor")]
-    partial class SeedProcessor
+    [Migration("20200502161328_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,12 +21,41 @@ namespace Bitukai.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Bitukai.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Processors"
+                        });
+                });
+
             modelBuilder.Entity("Bitukai.Models.Component", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AlternativeIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ComponentId")
                         .HasColumnType("int");
@@ -42,6 +71,8 @@ namespace Bitukai.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ComponentId");
 
@@ -317,10 +348,25 @@ namespace Bitukai.Data.Migrations
                         new
                         {
                             Id = 1,
+                            AlternativeIds = "",
+                            CategoryId = 1,
                             Manufacturer = "Intel",
                             Name = "Core i5-2134",
                             CoreClockGhz = 2.3f,
                             CoreCount = (byte)4,
+                            IntegratedGpu = "Gpu",
+                            Socket = "AM4",
+                            Tdp = 3.3999999999999999
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AlternativeIds = "1",
+                            CategoryId = 1,
+                            Manufacturer = "AMD",
+                            Name = "Ryzen 7 3700",
+                            CoreClockGhz = 3.7f,
+                            CoreCount = (byte)8,
                             IntegratedGpu = "Gpu",
                             Socket = "AM4",
                             Tdp = 3.3999999999999999
@@ -404,6 +450,12 @@ namespace Bitukai.Data.Migrations
 
             modelBuilder.Entity("Bitukai.Models.Component", b =>
                 {
+                    b.HasOne("Bitukai.Models.Category", "Category")
+                        .WithMany("Components")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Bitukai.Models.Component", null)
                         .WithMany("Alternatives")
                         .HasForeignKey("ComponentId");

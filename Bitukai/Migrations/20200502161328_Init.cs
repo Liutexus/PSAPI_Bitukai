@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Bitukai.Data.Migrations
+namespace Bitukai.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,11 +47,24 @@ namespace Bitukai.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Category",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -73,7 +85,7 @@ namespace Bitukai.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -153,6 +165,81 @@ namespace Bitukai.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Component",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Manufacturer = table.Column<string>(nullable: true),
+                    AlternativeIds = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false),
+                    ComponentId = table.Column<int>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false),
+                    FormFactor = table.Column<string>(nullable: true),
+                    ChipSet = table.Column<string>(nullable: true),
+                    MemoryType = table.Column<string>(nullable: true),
+                    MemorySlots = table.Column<byte>(nullable: true),
+                    CpuSocket = table.Column<string>(nullable: true),
+                    PowerSupply_FormFactor = table.Column<string>(nullable: true),
+                    Wattage = table.Column<int>(nullable: true),
+                    Efficiency = table.Column<string>(nullable: true),
+                    Modularity = table.Column<int>(nullable: true),
+                    Socket = table.Column<string>(nullable: true),
+                    Tdp = table.Column<double>(nullable: true),
+                    CoreCount = table.Column<byte>(nullable: true),
+                    CoreClockGhz = table.Column<float>(nullable: true),
+                    IntegratedGpu = table.Column<string>(nullable: true),
+                    CapacityGb = table.Column<int>(nullable: true),
+                    ModuleCount = table.Column<byte>(nullable: true),
+                    DdrType = table.Column<string>(nullable: true),
+                    SpeedMhz = table.Column<int>(nullable: true),
+                    CasLatency = table.Column<int>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    Storage_CapacityGb = table.Column<int>(nullable: true),
+                    Storage_Type = table.Column<string>(nullable: true),
+                    CacheMb = table.Column<int>(nullable: true),
+                    Storage_FormFactor = table.Column<string>(nullable: true),
+                    Interface = table.Column<string>(nullable: true),
+                    VideoCard_ChipSet = table.Column<string>(nullable: true),
+                    VideoCard_MemoryType = table.Column<string>(nullable: true),
+                    MemoryGb = table.Column<int>(nullable: true),
+                    CoreClockMhz = table.Column<int>(nullable: true),
+                    VideoCard_Interface = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Component", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Component_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Component_Component_ComponentId",
+                        column: x => x.ComponentId,
+                        principalTable: "Component",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Processors" });
+
+            migrationBuilder.InsertData(
+                table: "Component",
+                columns: new[] { "Id", "AlternativeIds", "CategoryId", "ComponentId", "Discriminator", "Manufacturer", "Name", "CoreClockGhz", "CoreCount", "IntegratedGpu", "Socket", "Tdp" },
+                values: new object[] { 1, "", 1, null, "Processor", "Intel", "Core i5-2134", 2.3f, (byte)4, "Gpu", "AM4", 3.3999999999999999 });
+
+            migrationBuilder.InsertData(
+                table: "Component",
+                columns: new[] { "Id", "AlternativeIds", "CategoryId", "ComponentId", "Discriminator", "Manufacturer", "Name", "CoreClockGhz", "CoreCount", "IntegratedGpu", "Socket", "Tdp" },
+                values: new object[] { 2, "1", 1, null, "Processor", "AMD", "Ryzen 7 3700", 3.7f, (byte)8, "Gpu", "AM4", 3.3999999999999999 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +278,16 @@ namespace Bitukai.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Component_CategoryId",
+                table: "Component",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Component_ComponentId",
+                table: "Component",
+                column: "ComponentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +308,16 @@ namespace Bitukai.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Component");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Category");
         }
     }
 }
