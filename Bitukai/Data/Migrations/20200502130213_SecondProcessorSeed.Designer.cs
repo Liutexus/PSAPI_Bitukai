@@ -4,14 +4,16 @@ using Bitukai.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bitukai.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200502130213_SecondProcessorSeed")]
+    partial class SecondProcessorSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,9 +27,6 @@ namespace Bitukai.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AlternativeIds")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ComponentId")
                         .HasColumnType("int");
@@ -318,7 +317,6 @@ namespace Bitukai.Data.Migrations
                         new
                         {
                             Id = 1,
-                            AlternativeIds = "",
                             Manufacturer = "Intel",
                             Name = "Core i5-2134",
                             CoreClockGhz = 2.3f,
@@ -330,7 +328,6 @@ namespace Bitukai.Data.Migrations
                         new
                         {
                             Id = 2,
-                            AlternativeIds = "1",
                             Manufacturer = "AMD",
                             Name = "Ryzen 7 3700",
                             CoreClockGhz = 3.7f,
