@@ -341,11 +341,7 @@ namespace Bitukai.Data.Migrations
                         new
                         {
                             Id = 1,
-<<<<<<< HEAD
-                            CategoryId = 0,
-=======
                             AlternativeIds = "",
->>>>>>> 77251d95a9e018704795061a47e93295dbdf2246
                             Manufacturer = "Intel",
                             Name = "Core i5-2134",
                             CoreClockGhz = 2.3f,
