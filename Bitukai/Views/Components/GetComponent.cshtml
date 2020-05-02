@@ -1,0 +1,48 @@
+﻿@model Processor
+
+@{
+    ViewData["title"] = "Details";
+}
+
+    <div>
+        <h4>Component</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Manufacturer)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Manufacturer)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CoreCount)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CoreCount)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CoreClockGhz)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CoreClockGhz)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Socket)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Socket)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IntegratedGpu)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IntegratedGpu)
+            </dd>
+        </dl>
+    </div>
