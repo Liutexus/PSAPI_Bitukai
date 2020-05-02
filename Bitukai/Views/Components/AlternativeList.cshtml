@@ -8,62 +8,12 @@
     else
     {
         <h2>Alternatives</h2>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>
-                @Html.DisplayNameFor(model => model.Manufacturer)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoreClockGhz)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IntegratedGpu)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CoreCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Socket)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tdp)
-                </th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model) {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Manufacturer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CoreClockGhz)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IntegratedGpu)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CoreCount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Socket)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Tdp)
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+
+        @foreach (var item in Model)
+        {
+            <li>
+                <a asp-action="GetComponent" asp-route-id="@item.Id">@item.Manufacturer @item.Name</a>
+            </li>
+        }
     }
 }
