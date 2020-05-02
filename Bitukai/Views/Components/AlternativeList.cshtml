@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Processor>
+
+@{
+    if (ViewData["EmptyListError"] != null)
+    {
+        <h2>There are no alternatives to this component.</h2>
+    }
+    else
+    {
+        <h2>Alternatives</h2>
+
+        @foreach (var item in Model)
+        {
+            <li>
+                <a asp-action="GetComponent" asp-route-id="@item.Id">@item.Manufacturer @item.Name</a>
+            </li>
+        }
+    }
+}
