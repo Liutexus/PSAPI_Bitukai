@@ -12,6 +12,8 @@ namespace Bitukai.Data
         public DbSet<Ram> Rams { get; set; }
         public DbSet<Storage> Storage { get; set; }
         public DbSet<VideoCard> VideoCards { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Component> Components { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

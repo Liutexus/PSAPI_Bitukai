@@ -1,15 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-
+@using Bitukai.Controllers
 @model IEnumerable<Category>
 
 <div class="container-fluid">
     <div class="header">
         <p>System Builder</p>
     </div>
-    @foreach (var item in Model)
-    {
-        <a href='@Url.Action("openComponentList", "Category", new {category = item.Name})'>@item.Name</a>}
+    @{foreach (var item in Model)
+        {
+            <h1>@item.Name</h1>} }
 </div>

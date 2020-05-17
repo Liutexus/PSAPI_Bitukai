@@ -4,14 +4,16 @@ using Bitukai.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bitukai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200516181539_AddCategoriesToDb")]
+    partial class AddCategoriesToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,7 +76,7 @@ namespace Bitukai.Migrations
 
                     b.HasIndex("ComponentId");
 
-                    b.ToTable("Components");
+                    b.ToTable("Component");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Component");
                 });
