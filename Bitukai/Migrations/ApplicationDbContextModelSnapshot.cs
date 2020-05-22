@@ -52,7 +52,7 @@ namespace Bitukai.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
 
                     b.HasData(
                         new
@@ -94,7 +94,7 @@ namespace Bitukai.Migrations
 
                     b.HasIndex("ComponentId");
 
-                    b.ToTable("Components");
+                    b.ToTable("Component");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Component");
                 });
