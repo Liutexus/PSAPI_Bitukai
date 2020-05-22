@@ -21,6 +21,17 @@ namespace Bitukai.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<ComponentCart>().HasKey(cc => new { cc.ComponentId, cc.CartId });
+            builder.Entity<ComponentCart>()
+                .HasOne<Component>(sc => sc.Component)
+                .WithMany(s => s.ComponentCarts)
+                .HasForeignKey(sc => sc.ComponentId);
+
+            builder.Entity<ComponentCart>()
+                .HasOne<Cart>(sc => sc.Cart)
+                .WithMany(s => s.ComponentCarts)
+                .HasForeignKey(sc => sc.CartId);
+
             base.OnModelCreating(builder);
             Seed.SeedData(builder);
         }

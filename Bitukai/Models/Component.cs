@@ -11,5 +11,6 @@ namespace Bitukai.Models
         public IEnumerable<Component> Alternatives { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+        public IList<ComponentCart> ComponentCarts { get; set; }
     }
 }
