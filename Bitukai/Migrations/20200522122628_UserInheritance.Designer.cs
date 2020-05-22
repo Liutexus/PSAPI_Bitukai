@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bitukai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200517102718_CartAndOrder")]
-    partial class CartAndOrder
+    [Migration("20200522122628_UserInheritance")]
+    partial class UserInheritance
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,7 +54,7 @@ namespace Bitukai.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -96,7 +96,7 @@ namespace Bitukai.Migrations
 
                     b.HasIndex("ComponentId");
 
-                    b.ToTable("Component");
+                    b.ToTable("Components");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Component");
                 });
