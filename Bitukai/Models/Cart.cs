@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bitukai.Models
 {
@@ -10,9 +7,11 @@ namespace Bitukai.Models
     {
         public int Id { get; set; }
         public float TotalPrice { get; set; }
+        public int UserId { get; set; }
+        public IdentityUser User { get; set; }
         public IList<ComponentCart> ComponentCarts { get; set; }
+        public int OrderId { get; set; }
         public Order Order { get; set; }
-
 
     }
 }
