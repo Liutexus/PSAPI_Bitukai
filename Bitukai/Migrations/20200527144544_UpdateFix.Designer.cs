@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bitukai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200522162713_MinorChanges")]
-    partial class MinorChanges
+    [Migration("20200527144544_UpdateFix")]
+    partial class UpdateFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,7 +28,7 @@ namespace Bitukai.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<float>("TotalPrice")
@@ -72,6 +72,29 @@ namespace Bitukai.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Bitukai.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComponentId");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("Bitukai.Models.Component", b =>
                 {
                     b.Property<int>("Id")
@@ -104,7 +127,7 @@ namespace Bitukai.Migrations
 
                     b.HasIndex("ComponentId");
 
-                    b.ToTable("Components");
+                    b.ToTable("Component");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Component");
                 });
@@ -531,11 +554,22 @@ namespace Bitukai.Migrations
                 {
                     b.HasOne("Bitukai.Models.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId1");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.Comment", b =>
+                {
+                    b.HasOne("Bitukai.Models.Component", "Component")
+                        .WithMany("Comments")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Bitukai.Models.Component", b =>

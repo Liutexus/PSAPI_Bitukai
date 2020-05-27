@@ -26,7 +26,7 @@ namespace Bitukai.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<float>("TotalPrice")
@@ -536,15 +536,6 @@ namespace Bitukai.Migrations
                     b.HasDiscriminator().HasValue("VideoCard");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Bitukai.Models.Comment", b =>
-                {
-                    b.HasOne("Bitukai.Models.Component", "Component")
-                        .WithMany("Comments")
-                        .HasForeignKey("ComponentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-=======
             modelBuilder.Entity("Bitukai.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -561,12 +552,22 @@ namespace Bitukai.Migrations
                 {
                     b.HasOne("Bitukai.Models.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId1");
->>>>>>> 1d8d6239bbb09280d05e2f47fa2dbcf953247e0b
+                });
+
+            modelBuilder.Entity("Bitukai.Models.Comment", b =>
+                {
+                    b.HasOne("Bitukai.Models.Component", "Component")
+                        .WithMany("Comments")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Bitukai.Models.Component", b =>
