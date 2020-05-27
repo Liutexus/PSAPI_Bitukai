@@ -19,6 +19,34 @@ namespace Bitukai.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Bitukai.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Carts");
+                });
+
             modelBuilder.Entity("Bitukai.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -102,6 +130,39 @@ namespace Bitukai.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Component");
                 });
 
+            modelBuilder.Entity("Bitukai.Models.ComponentCart", b =>
+                {
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ComponentId", "CartId");
+
+                    b.HasIndex("CartId");
+
+                    b.ToTable("ComponentCarts");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -165,6 +226,10 @@ namespace Bitukai.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -216,6 +281,8 @@ namespace Bitukai.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -469,6 +536,7 @@ namespace Bitukai.Migrations
                     b.HasDiscriminator().HasValue("VideoCard");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("Bitukai.Models.Comment", b =>
                 {
                     b.HasOne("Bitukai.Models.Component", "Component")
@@ -476,6 +544,29 @@ namespace Bitukai.Migrations
                         .HasForeignKey("ComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+=======
+            modelBuilder.Entity("Bitukai.Models.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("CartId");
+
+                    b.HasDiscriminator().HasValue("User");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.Cart", b =>
+                {
+                    b.HasOne("Bitukai.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+>>>>>>> 1d8d6239bbb09280d05e2f47fa2dbcf953247e0b
                 });
 
             modelBuilder.Entity("Bitukai.Models.Component", b =>
@@ -489,6 +580,21 @@ namespace Bitukai.Migrations
                     b.HasOne("Bitukai.Models.Component", null)
                         .WithMany("Alternatives")
                         .HasForeignKey("ComponentId");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.ComponentCart", b =>
+                {
+                    b.HasOne("Bitukai.Models.Cart", "Cart")
+                        .WithMany("ComponentCarts")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bitukai.Models.Component", "Component")
+                        .WithMany("ComponentCarts")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -538,6 +644,15 @@ namespace Bitukai.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Bitukai.Models.User", b =>
+                {
+                    b.HasOne("Bitukai.Models.Cart", "Cart")
+                        .WithMany()
+                        .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

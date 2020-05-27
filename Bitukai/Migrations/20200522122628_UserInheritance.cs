@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bitukai.Migrations
 {
-    public partial class Init : Migration
+    public partial class UserInheritance : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,7 +47,7 @@ namespace Bitukai.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -56,7 +56,21 @@ namespace Bitukai.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderStatus = table.Column<int>(nullable: false),
+                    ReleaseDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,7 +180,7 @@ namespace Bitukai.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Component",
+                name: "Components",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -210,33 +224,77 @@ namespace Bitukai.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Component", x => x.Id);
+                    table.PrimaryKey("PK_Components", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Component_Category_CategoryId",
+                        name: "FK_Components_Categories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Category",
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Component_Component_ComponentId",
+                        name: "FK_Components_Components_ComponentId",
                         column: x => x.ComponentId,
-                        principalTable: "Component",
+                        principalTable: "Components",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalPrice = table.Column<float>(nullable: false),
+                    OrderId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cart_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ComponentCart",
+                columns: table => new
+                {
+                    ComponentId = table.Column<int>(nullable: false),
+                    CartId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ComponentCart", x => new { x.ComponentId, x.CartId });
+                    table.ForeignKey(
+                        name: "FK_ComponentCart_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ComponentCart_Components_ComponentId",
+                        column: x => x.ComponentId,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 1, "Processors" });
 
             migrationBuilder.InsertData(
-                table: "Component",
+                table: "Components",
                 columns: new[] { "Id", "AlternativeIds", "CategoryId", "ComponentId", "Discriminator", "Manufacturer", "Name", "CoreClockGhz", "CoreCount", "IntegratedGpu", "Socket", "Tdp" },
                 values: new object[] { 1, "", 1, null, "Processor", "Intel", "Core i5-2134", 2.3f, (byte)4, "Gpu", "AM4", 3.3999999999999999 });
 
             migrationBuilder.InsertData(
-                table: "Component",
+                table: "Components",
                 columns: new[] { "Id", "AlternativeIds", "CategoryId", "ComponentId", "Discriminator", "Manufacturer", "Name", "CoreClockGhz", "CoreCount", "IntegratedGpu", "Socket", "Tdp" },
                 values: new object[] { 2, "1", 1, null, "Processor", "AMD", "Ryzen 7 3700", 3.7f, (byte)8, "Gpu", "AM4", 3.3999999999999999 });
 
@@ -280,13 +338,23 @@ namespace Bitukai.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Component_CategoryId",
-                table: "Component",
+                name: "IX_Cart_OrderId",
+                table: "Cart",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComponentCart_CartId",
+                table: "ComponentCart",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Components_CategoryId",
+                table: "Components",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Component_ComponentId",
-                table: "Component",
+                name: "IX_Components_ComponentId",
+                table: "Components",
                 column: "ComponentId");
         }
 
@@ -308,7 +376,7 @@ namespace Bitukai.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Component");
+                name: "ComponentCart");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -317,7 +385,16 @@ namespace Bitukai.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Cart");
+
+            migrationBuilder.DropTable(
+                name: "Components");
+
+            migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

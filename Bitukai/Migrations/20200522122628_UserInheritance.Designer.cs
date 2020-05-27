@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bitukai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200517094053_AddComponentToDb")]
-    partial class AddComponentToDb
+    [Migration("20200522122628_UserInheritance")]
+    partial class UserInheritance
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,26 @@ namespace Bitukai.Migrations
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Bitukai.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("TotalPrice")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Cart");
+                });
 
             modelBuilder.Entity("Bitukai.Models.Category", b =>
                 {
@@ -79,6 +99,39 @@ namespace Bitukai.Migrations
                     b.ToTable("Components");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Component");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.ComponentCart", b =>
+                {
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ComponentId", "CartId");
+
+                    b.HasIndex("CartId");
+
+                    b.ToTable("ComponentCart");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -448,6 +501,13 @@ namespace Bitukai.Migrations
                     b.HasDiscriminator().HasValue("VideoCard");
                 });
 
+            modelBuilder.Entity("Bitukai.Models.Cart", b =>
+                {
+                    b.HasOne("Bitukai.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+                });
+
             modelBuilder.Entity("Bitukai.Models.Component", b =>
                 {
                     b.HasOne("Bitukai.Models.Category", "Category")
@@ -459,6 +519,21 @@ namespace Bitukai.Migrations
                     b.HasOne("Bitukai.Models.Component", null)
                         .WithMany("Alternatives")
                         .HasForeignKey("ComponentId");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.ComponentCart", b =>
+                {
+                    b.HasOne("Bitukai.Models.Cart", "Cart")
+                        .WithMany("ComponentCarts")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bitukai.Models.Component", "Component")
+                        .WithMany("ComponentCarts")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -11,6 +11,10 @@ namespace Bitukai.Models
         public IEnumerable<Component> Alternatives { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+<<<<<<< HEAD
         public ICollection<Comment> Comments { get; set; }
+=======
+        public IList<ComponentCart> ComponentCarts { get; set; }
+>>>>>>> 1d8d6239bbb09280d05e2f47fa2dbcf953247e0b
     }
 }
