@@ -18,7 +18,10 @@ namespace Bitukai.Data
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ComponentCart> ComponentCarts { get; set; }
+        public DbSet<UserFavoriteComponent> UserFavoriteComponents { get; set; }
+        public DbSet<Bitukai.Models.Comment> Comment { get; set; }
         public DbSet<User> UsersDb { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -38,10 +41,19 @@ namespace Bitukai.Data
                 .WithMany(s => s.ComponentCarts)
                 .HasForeignKey(sc => sc.CartId);
 
+            builder.Entity<UserFavoriteComponent>().HasKey(cc => new { cc.ComponentId, cc.UserId });
+            builder.Entity<UserFavoriteComponent>()
+                .HasOne<Component>(sc => sc.Component)
+                .WithMany(s => s.FavoriteComponents)
+                .HasForeignKey(sc => sc.ComponentId);
+
+            builder.Entity<UserFavoriteComponent>()
+                .HasOne<User>(sc => sc.User)
+                .WithMany(s => s.FavoriteComponents)
+                .HasForeignKey(sc => sc.UserId);
+
             base.OnModelCreating(builder);
             Seed.SeedData(builder);
         }
-
-        public DbSet<Bitukai.Models.Comment> Comment { get; set; }
     }
 }

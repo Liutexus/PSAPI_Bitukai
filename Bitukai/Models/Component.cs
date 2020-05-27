@@ -13,5 +13,6 @@ namespace Bitukai.Models
         public Category Category { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public IList<ComponentCart> ComponentCarts { get; set; }
+        public IList<UserFavoriteComponent> FavoriteComponents { get; set; }
     }
 }

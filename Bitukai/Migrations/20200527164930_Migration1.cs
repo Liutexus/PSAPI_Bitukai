@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bitukai.Migrations
 {
-    public partial class UpdateFix : Migration
+    public partial class Migration1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -290,6 +290,30 @@ namespace Bitukai.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserFavoriteComponents",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(nullable: false),
+                    ComponentId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserFavoriteComponents", x => new { x.ComponentId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserFavoriteComponents_Component_ComponentId",
+                        column: x => x.ComponentId,
+                        principalTable: "Component",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserFavoriteComponents_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
@@ -379,6 +403,11 @@ namespace Bitukai.Migrations
                 table: "ComponentCarts",
                 column: "CartId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_UserFavoriteComponents_UserId",
+                table: "UserFavoriteComponents",
+                column: "UserId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                 table: "AspNetUserRoles",
@@ -446,6 +475,9 @@ namespace Bitukai.Migrations
 
             migrationBuilder.DropTable(
                 name: "ComponentCarts");
+
+            migrationBuilder.DropTable(
+                name: "UserFavoriteComponents");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

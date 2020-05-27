@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bitukai.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200527144544_UpdateFix")]
-    partial class UpdateFix
+    [Migration("20200527164930_Migration1")]
+    partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -163,6 +163,21 @@ namespace Bitukai.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Bitukai.Models.UserFavoriteComponent", b =>
+                {
+                    b.Property<int>("ComponentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ComponentId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFavoriteComponents");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -596,6 +611,21 @@ namespace Bitukai.Migrations
                     b.HasOne("Bitukai.Models.Component", "Component")
                         .WithMany("ComponentCarts")
                         .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Bitukai.Models.UserFavoriteComponent", b =>
+                {
+                    b.HasOne("Bitukai.Models.Component", "Component")
+                        .WithMany("FavoriteComponents")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bitukai.Models.User", "User")
+                        .WithMany("FavoriteComponents")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -26,6 +26,8 @@ namespace Bitukai.Controllers
         // Function which adds a components to user's cart.
         public async Task<IActionResult> AddToCart(Component newComponent)
         {
+
+
             if (CheckIfComponentExists(newComponent))
             {
                 ViewData["ComponentExistsError"] = true; // Return a warning that component already exists
