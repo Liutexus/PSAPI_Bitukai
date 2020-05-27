@@ -32,7 +32,12 @@ namespace Bitukai.Controllers
         
         public async Task<IActionResult> openComponentList(string category)
         {
-            var categories = _context.Components.Where(b => b.Category.Name == category);
+            var categories = _context.Components.Where(b => b.Category.Name == category).ToList();
+
+            if (categories.Count == 0)
+            {
+                ViewBag.message = "There is no components under this category";
+            }
 
             return View("ComponentList", categories);
         }

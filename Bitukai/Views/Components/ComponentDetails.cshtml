@@ -1,4 +1,5 @@
 ﻿@using Bitukai.Controllers
+
 @model Processor
 
 @{
@@ -50,5 +51,10 @@
 <div>
     @{
         await Html.RenderPartialAsync("AlternativeList", (List<Processor>)Model.Alternatives);
+    }
+</div>
+<div>
+    @{
+        Html.Action("GetComments", "Comments", new { id = Model.Id });
     }
 </div>

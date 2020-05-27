@@ -14,6 +14,7 @@ namespace Bitukai.Data
         public DbSet<VideoCard> VideoCards { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Component> Components { get; set; }
+        public DbSet<Component> Comments { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -26,5 +27,7 @@ namespace Bitukai.Data
             base.OnModelCreating(builder);
             Seed.SeedData(builder);
         }
+
+        public DbSet<Bitukai.Models.Comment> Comment { get; set; }
     }
 }
