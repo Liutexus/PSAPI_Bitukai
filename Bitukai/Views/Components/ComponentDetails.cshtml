@@ -7,7 +7,12 @@
 <div>
     <h4>Component</h4>
     <hr />
-    @Html.ActionLink("Add to Cart", "AddToCart", "Cart", new {componentId = Model.Id})
+    @{
+        if (User.Identity.IsAuthenticated)
+        {
+            @Html.ActionLink("Add to Cart", "AddToCart", "Cart", new {componentId = Model.Id});
+        }
+    }
     @{
         if (ViewData["ComponentExistsError"] != null)
         {
