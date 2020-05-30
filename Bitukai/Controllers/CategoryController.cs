@@ -23,14 +23,14 @@ namespace Bitukai.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetCategories()
+        public IActionResult GetCategories()
         {
             var category =  _context.Categories.ToList();
 
             return View("~/Views/Home/Index.cshtml", category);
         }
         
-        public async Task<IActionResult> openComponentList(string category)
+        public IActionResult openComponentList(string category)
         {
             var categories = _context.Components.Where(b => b.Category.Name == category).ToList();
 

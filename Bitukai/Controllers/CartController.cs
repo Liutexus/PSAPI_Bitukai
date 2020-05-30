@@ -28,7 +28,7 @@ namespace Bitukai.Controllers
         }
 
         // Function which adds a components to user's cart.
-        public async Task<IActionResult> AddToCart(Component newComponent)
+        public IActionResult AddToCart(Component newComponent)
         {
 
 
@@ -69,7 +69,7 @@ namespace Bitukai.Controllers
         }
 
         // Function which returns user's cart.
-        public async Task<IActionResult> GetUserCart()
+        public IActionResult GetUserCart()
         {
             var userCart = _context.Carts.FirstOrDefault(); // This needs to get exact user's cart (no authentication atm)
 
@@ -77,7 +77,7 @@ namespace Bitukai.Controllers
         }
 
         // Edits a component inside user's cart.
-        public async Task<IActionResult> EditCartComponent(Component oldComponent, Component newComponent)
+        public IActionResult EditCartComponent(Component oldComponent, Component newComponent)
         {
             var userCart = _context.Carts.FirstOrDefault(); // This needs to get exact user's cart
 

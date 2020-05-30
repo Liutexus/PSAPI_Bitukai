@@ -14,12 +14,11 @@ namespace Bitukai.Data
         public DbSet<VideoCard> VideoCards { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Component> Components { get; set; }
-        public DbSet<Component> Comments { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<ComponentCart> ComponentCarts { get; set; }
         public DbSet<UserFavoriteComponent> UserFavoriteComponents { get; set; }
-        public DbSet<Bitukai.Models.Comment> Comment { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
