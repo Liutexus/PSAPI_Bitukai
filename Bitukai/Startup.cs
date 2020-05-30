@@ -33,7 +33,7 @@ namespace Bitukai
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -62,7 +62,7 @@ namespace Bitukai
                 endpoints.MapRazorPages();
             });
 
-            Seed.SeedUsers(userManager, roleManager);
+            Seed.SeedUsers(userManager, roleManager, dbContext);
         }
     }
 }

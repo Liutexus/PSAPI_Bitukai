@@ -20,9 +20,9 @@ namespace Bitukai.Controllers
         }
 
         // GET: Comments
-        public async Task<IActionResult> GetComments(int id)
+        public IActionResult GetComments(int id)
         {
-            var comments = _context.Comment.Where(c => c.ComponentId == id).ToList() ;
+            var comments = _context.Comments.Where(c => c.ComponentId == id).ToList() ;
             return View("CommentList", comments);
         }
 
@@ -34,7 +34,7 @@ namespace Bitukai.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comment
+            var comment = await _context.Comments
                 .Include(c => c.Component)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
@@ -77,7 +77,7 @@ namespace Bitukai.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comment.FindAsync(id);
+            var comment = await _context.Comments.FindAsync(id);
             if (comment == null)
             {
                 return NotFound();
@@ -130,7 +130,7 @@ namespace Bitukai.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comment
+            var comment = await _context.Comments
                 .Include(c => c.Component)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (comment == null)
@@ -146,15 +146,15 @@ namespace Bitukai.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var comment = await _context.Comment.FindAsync(id);
-            _context.Comment.Remove(comment);
+            var comment = await _context.Comments.FindAsync(id);
+            _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommentExists(int id)
         {
-            return _context.Comment.Any(e => e.Id == id);
+            return _context.Comments.Any(e => e.Id == id);
         }
     }
 }

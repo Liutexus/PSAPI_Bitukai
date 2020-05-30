@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bitukai.Models;
+﻿using Bitukai.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Bitukai.Data
 {
@@ -52,7 +52,7 @@ namespace Bitukai.Data
             builder.Entity<Processor>().HasData(processors);
         }
 
-        public static void SeedUsers(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static void SeedUsers(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext)
         {
             if (!roleManager.RoleExistsAsync("Customer").Result)
             {
@@ -85,6 +85,30 @@ namespace Bitukai.Data
                 {
                     userManager.AddToRoleAsync(user, "Employee").Wait();
                 }
+            }
+
+            if (!dbContext.Comments.Any())
+            {
+                var user = userManager.Users.First();
+                dbContext.Comments.AddRange(new List<Comment>
+                {
+                    new Comment
+                    {
+                        ComponentId = 2, CreatedAt = new DateTime(2020, 5, 25),
+                        Description = "Some informative description for demo.", UserId = user.Id
+                    },
+                    new Comment
+                    {
+                        ComponentId = 2, CreatedAt = new DateTime(2020, 5, 26),
+                        Description = "Another informative description for demo.", UserId = user.Id
+                    },
+                    new Comment
+                    {
+                        ComponentId = 2, CreatedAt = new DateTime(2020, 5, 27),
+                        Description = "Last informative description for demo.", UserId = user.Id
+                    }
+                });
+                dbContext.SaveChanges();
             }
         }
     }
