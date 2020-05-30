@@ -54,6 +54,7 @@ namespace Bitukai.Data
 
         public static void SeedUsers(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbContext)
         {
+
             if (!roleManager.RoleExistsAsync("Customer").Result)
             {
                 var role = new IdentityRole
@@ -87,9 +88,22 @@ namespace Bitukai.Data
                 }
             }
 
+            if (!dbContext.Carts.Any())
+            {
+                var user = userManager.Users.First(u => u.Email == "employee@email.com");
+                dbContext.Carts.Add(new Cart
+                {
+                    TotalPrice = 0.0f,
+                    UserId = user.Id
+                });
+                dbContext.SaveChanges();
+                user.CartId = dbContext.Carts.First().Id;
+                userManager.UpdateAsync(user).Wait();
+            }
+
             if (!dbContext.Comments.Any())
             {
-                var user = userManager.Users.First();
+                var user = userManager.Users.First(u => u.Email == "employee@email.com");
                 dbContext.Comments.AddRange(new List<Comment>
                 {
                     new Comment

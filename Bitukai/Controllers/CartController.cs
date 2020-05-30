@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bitukai.Data;
 using Bitukai.Models;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Bitukai.Migrations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bitukai.Controllers
 {
@@ -28,44 +30,50 @@ namespace Bitukai.Controllers
         }
 
         // Function which adds a components to user's cart.
-        public IActionResult AddToCart(Component newComponent)
+        public async Task<IActionResult> AddToCart(int componentId)
         {
+            var user = await GetCurrentUser();
+            var cart = await _context.Carts.FirstAsync(c => c.UserId == user.Id);
 
-
-            if (CheckIfComponentExists(newComponent))
+            if (CheckIfComponentExists(componentId, cart))
             {
-                ViewData["ComponentExistsError"] = true; // Return a warning that component already exists
+                TempData["ComponentExistsError"] = true;
+                TempData["ComponentAdded"] = null;
             }
             else
             {
-                AddComponent(newComponent);
+                await _context.ComponentCarts.AddAsync(new ComponentCart
+                {
+                    CartId = cart.Id,
+                    ComponentId = componentId
+                });
+                await _context.SaveChangesAsync();
+                TempData["ComponentExistsError"] = null;
+                TempData["ComponentAdded"] = true;
             }
 
-            return View("ItemList");
+            return RedirectToAction("GetComponent", "Components", new {id = componentId});
+        }
+
+        private async Task<User> GetCurrentUser()
+        {
+            if (User is null)
+            {
+                throw new UnauthorizedAccessException("You must be logged in.");
+            }
+
+            return await _userManager.FindByEmailAsync(User.Identity.Name);
         }
 
         // Function which checks whether the component exists inside user's cart.
-        public bool CheckIfComponentExists(Component newComponent)
+        public bool CheckIfComponentExists(int componentId, Cart userCart)
         {
-            if (_context.ComponentCarts.Find(newComponent) == null) // Looks for existing component in the cart
-                return false;
-            return true;
-        }
-        // Function which adds a component inside user's cart.
-        public void AddComponent(Component newComponent)
-        {
-            var userCart = _context.Carts.FirstOrDefault(); // This needs to get exact user's cart (no authentication atm)
-            ComponentCart newCompCart = new ComponentCart(); // Creating new many-to-many intermediate entity
+            if (_context.ComponentCarts.Any(cc => cc.CartId == userCart.Id && cc.ComponentId == componentId))
+            {
+                return true;
+            }
 
-            // Assigning respective variables.
-            newCompCart.CartId = userCart.Id;
-            newCompCart.Cart = userCart;
-            newCompCart.ComponentId = newComponent.Id;
-            newCompCart.Component = newComponent;
-
-            _context.ComponentCarts.Add(newCompCart); // Adding new entity to the database
-
-            ViewData["ComponentAddSuccess"] = true; // Return a notification that component was added successfully
+            return false;
         }
 
         // Function which returns user's cart.
@@ -112,7 +120,5 @@ namespace Bitukai.Controllers
             userCart.ComponentCarts.Clear(); // Clearing all elements inside user's cart.
             ViewData["CartPurgeSuccess"] = true; // Return a success notification
         }
-
-
     }
 }
