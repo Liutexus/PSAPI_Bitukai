@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Processor>
+
+@{
+    ViewData["title"] = "Comparison";
+}
+
+<div>
+    <h4>Component Comparison</h4>
+    <p>Manufacturer: @Model.ElementAt(0).Manufacturer vs @Model.ElementAt(1).Manufacturer</p>
+    <p>Name: @Model.ElementAt(0).Name vs @Model.ElementAt(1).Name</p>
+    <p>CoreClockGhz: @Model.ElementAt(0).CoreClockGhz vs @Model.ElementAt(1).CoreClockGhz</p>
+    <p>CoreCount: @Model.ElementAt(0).CoreCount vs @Model.ElementAt(1).CoreCount</p>
+    <p>IntegratedGpu: @Model.ElementAt(0).IntegratedGpu vs @Model.ElementAt(1).IntegratedGpu</p>
+    <p>Tdp: @Model.ElementAt(0).Tdp vs @Model.ElementAt(1).Tdp</p>
+    <p>Socket: @Model.ElementAt(0).Socket vs @Model.ElementAt(1).Socket</p>
+</div>
