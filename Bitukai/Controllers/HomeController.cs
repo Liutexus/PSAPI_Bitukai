@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Bitukai.Data;
+using Bitukai.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
-using Bitukai.Data;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Bitukai.Models;
 
 namespace Bitukai.Controllers
 {
@@ -21,9 +17,7 @@ namespace Bitukai.Controllers
 
         public IActionResult Index()
         {
-            var category = _context.Categories.ToList();
-
-            return View("Index", category);
+            return RedirectToAction("GetCategories", "Category");
         }
 
         public IActionResult Privacy()
