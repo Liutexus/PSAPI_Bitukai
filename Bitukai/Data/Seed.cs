@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Bitukai.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bitukai.Data
 {
     public static class Seed
     {
-        public static void SeedData(ModelBuilder builder)
+        public static void SeedData(ModelBuilder builder, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             builder.Entity<Category>().HasData(new Category
             {
@@ -48,6 +50,42 @@ namespace Bitukai.Data
                 }
             };
             builder.Entity<Processor>().HasData(processors);
+        }
+
+        public static async Task SeedUsers(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            if (!roleManager.RoleExistsAsync("Customer").Result)
+            {
+                var role = new IdentityRole
+                {
+                    Name = "Customer"
+                };
+                roleManager.CreateAsync(role).Wait();
+            }
+
+            if (!roleManager.RoleExistsAsync("Employee").Result)
+            {
+                var role = new IdentityRole
+                {
+                    Name = "Employee"
+                };
+                roleManager.CreateAsync(role).Wait();
+            }
+
+            if (userManager.GetUsersInRoleAsync("Employee").Result.Count <= 0)
+            {
+                var user = new User
+                {
+                    UserName = "employee@email.com",
+                    Email = "employee@email.com",
+                    EmailConfirmed = true
+                };
+                var result = userManager.CreateAsync(user, "Employee1!").Result;
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, "Employee").Wait();
+                }
+            }
         }
     }
 }
