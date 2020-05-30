@@ -1,0 +1,18 @@
+﻿@model Cart
+@{
+    ViewData["title"] = "Cart";
+}
+<div>
+    <h4>Cart</h4>
+    <hr />
+    
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TotalPrice)
+        </dt>
+        @foreach (var cc in Model.ComponentCarts)
+        {
+            @Html.Display($"{cc.Component.Manufacturer} {cc.Component.Name}")
+        }
+    </dl>
+</div>

@@ -46,6 +46,9 @@ namespace Bitukai.Controllers
                     ComponentId = componentId
                 });
                 await _context.SaveChangesAsync();
+
+                var newComponent = await _context.Components.FirstAsync(c => c.Id == componentId);
+
                 TempData["ComponentExistsError"] = null;
                 TempData["ComponentAdded"] = true;
             }
@@ -75,11 +78,20 @@ namespace Bitukai.Controllers
         }
 
         // Function which returns user's cart.
-        public IActionResult GetUserCart()
+        public async Task<IActionResult> GetUserCart()
         {
-            var userCart = _context.Carts.FirstOrDefault(); // This needs to get exact user's cart (no authentication atm)
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+                var userCart = await _context.Carts
+                    .Include(c => c.ComponentCarts)
+                    .ThenInclude(cc => cc.Component)
+                    .FirstAsync(c => c.Id == user.CartId);
 
-            return View("ItemList", userCart);
+                return View("CartInfo", userCart);
+            }
+
+            return Unauthorized();
         }
     }
 }
