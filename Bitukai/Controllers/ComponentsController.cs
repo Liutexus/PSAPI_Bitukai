@@ -1,6 +1,7 @@
 ﻿using Bitukai.Data;
 using Bitukai.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,9 @@ namespace Bitukai.Controllers
                     ViewData["EmptyCommentsError"] = true;
                 }
             }
-
+            var comparisonComponents = await _context.Processors.Where(p => p.Id != id).ToListAsync();
+            ViewBag.ComparisonComponents = new SelectList(comparisonComponents, "Id", "Name");
+            TempData["OriginalComponentId"] = component.Id;
             return View("ComponentDetails", component);
         }
 
@@ -71,6 +74,21 @@ namespace Bitukai.Controllers
             var components = await _context.Components.Where(c => c.CategoryId == categoryId).ToListAsync();
 
             return View("ComponentList", components);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetOtherComponent()
+        {
+            var originalComponentId = (int)TempData["OriginalComponentId"];
+            var comparisonComponentId = int.Parse(Request.Form["ComparisonComponents"]);
+
+            var componentsToCompare = new List<Processor>
+            {
+                await _context.Processors.FirstAsync(p => p.Id == originalComponentId),
+                await _context.Processors.FirstAsync(p => p.Id == comparisonComponentId)
+            };
+
+            return View("CompareComponents", componentsToCompare);
         }
     }
 }
