@@ -93,12 +93,11 @@ namespace Bitukai.Data
                 var user = userManager.Users.First(u => u.Email == "employee@email.com");
                 dbContext.Carts.Add(new Cart
                 {
-                    Id = 1,
                     TotalPrice = 0.0f,
                     UserId = user.Id
                 });
                 dbContext.SaveChanges();
-                user.CartId = 1;
+                user.CartId = dbContext.Carts.First().Id;
                 userManager.UpdateAsync(user).Wait();
             }
 
