@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Bitukai.Data;
+using Bitukai.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Bitukai.Data;
-using Bitukai.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using Bitukai.Migrations;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bitukai.Controllers
 {
@@ -66,7 +64,7 @@ namespace Bitukai.Controllers
         }
 
         // Function which checks whether the component exists inside user's cart.
-        public bool CheckIfComponentExists(int componentId, Cart userCart)
+        private bool CheckIfComponentExists(int componentId, Cart userCart)
         {
             if (_context.ComponentCarts.Any(cc => cc.CartId == userCart.Id && cc.ComponentId == componentId))
             {
@@ -82,43 +80,6 @@ namespace Bitukai.Controllers
             var userCart = _context.Carts.FirstOrDefault(); // This needs to get exact user's cart (no authentication atm)
 
             return View("ItemList", userCart);
-        }
-
-        // Edits a component inside user's cart.
-        public IActionResult EditCartComponent(Component oldComponent, Component newComponent)
-        {
-            var userCart = _context.Carts.FirstOrDefault(); // This needs to get exact user's cart
-
-            ComponentCart oldCompCart = new ComponentCart(); // Creating many-to-many intermediate entity
-            // Assigning respective variables.
-            oldCompCart.CartId = userCart.Id;
-            oldCompCart.Cart = userCart;
-            oldCompCart.ComponentId = oldComponent.Id;
-            oldCompCart.Component = oldComponent;
-
-            userCart.ComponentCarts.Remove(oldCompCart); // Removing the entity
-
-            if(newComponent != null) // Did the user specify other component?
-            {
-                ComponentCart newCompCart = new ComponentCart(); // Creating new many-to-many intermediate entity
-                // Assigning respective variables.
-                newCompCart.CartId = userCart.Id;
-                newCompCart.Cart = userCart;
-                newCompCart.ComponentId = newComponent.Id;
-                newCompCart.Component = newComponent;
-
-                userCart.ComponentCarts.Add(newCompCart); // Adding the new entity
-            }
-
-            return View("Index");
-        }
-
-        // Completely empty the user's cart
-        public void PurgeUserCart()
-        {
-            var userCart = _context.Carts.FirstOrDefault(); // This needs to get exact user's cart
-            userCart.ComponentCarts.Clear(); // Clearing all elements inside user's cart.
-            ViewData["CartPurgeSuccess"] = true; // Return a success notification
         }
     }
 }
