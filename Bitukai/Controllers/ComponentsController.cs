@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Bitukai.Data;
+using Bitukai.Migrations;
 using Bitukai.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +13,12 @@ namespace Bitukai.Controllers
     public class ComponentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ComponentsController(ApplicationDbContext context)
+        public ComponentsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -33,6 +37,12 @@ namespace Bitukai.Controllers
             else
             {
                 component.Alternatives = await GetAlternatives(component);
+                component.Comments = await GetCommentsWithAuthors(component);
+
+                if (!component.Comments.Any())
+                {
+                    ViewData["EmptyCommentsError"] = true;
+                }
             }
 
             return View("ComponentDetails", component);
@@ -49,6 +59,12 @@ namespace Bitukai.Controllers
             }
 
             return alternatives;
+        }
+        private async Task<ICollection<Comment>> GetCommentsWithAuthors(Component component)
+        {
+            var commentsWithAuthors = await _context.Comments.Include(c => c.User).Where(c => c.ComponentId == component.Id).ToListAsync();
+
+            return commentsWithAuthors;
         }
     }
 }

@@ -6,24 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bitukai.Data;
+using Bitukai.Migrations;
 using Bitukai.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bitukai.Controllers
 {
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public CommentsController(ApplicationDbContext context)
+        public CommentsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
-        }
-
-        // GET: Comments
-        public IActionResult GetComments(int id)
-        {
-            var comments = _context.Comments.Where(c => c.ComponentId == id).ToList() ;
-            return View("CommentList", comments);
+            _userManager = userManager;
         }
 
         // GET: Comments/Details/5
