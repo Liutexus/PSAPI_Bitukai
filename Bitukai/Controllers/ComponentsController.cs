@@ -25,7 +25,10 @@ namespace Bitukai.Controllers
         public async Task<IActionResult> GetComponent(int id)
         {
             var component = await _context.Processors.FirstOrDefaultAsync(c => c.Id == id);
-            
+
+            ViewData["ComponentExistsError"] = TempData["ComponentExistsError"];
+            ViewData["ComponentAdded"] = TempData["ComponentAdded"];
+
             if (component.AlternativeIds == string.Empty)
             {
                 ViewData["EmptyListError"] = true;

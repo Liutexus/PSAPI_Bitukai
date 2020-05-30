@@ -7,6 +7,17 @@
 <div>
     <h4>Component</h4>
     <hr />
+    @Html.ActionLink("Add to Cart", "AddToCart", "Cart", new {componentId = Model.Id})
+    @{
+        if (ViewData["ComponentExistsError"] != null)
+        {
+            <p>You already have this component in your cart.</p>
+        }
+        else if (ViewData["ComponentAdded"] != null)
+        {
+            <p>You have successfully added this component to your cart.</p>
+        }
+    }
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Manufacturer)
