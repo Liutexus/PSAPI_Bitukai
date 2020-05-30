@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Bitukai.Data;
+using Bitukai.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Bitukai.Data;
-using Bitukai.Migrations;
-using Bitukai.Models;
-using Microsoft.AspNetCore.Identity;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bitukai.Controllers
 {
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
 
-        public CommentsController(ApplicationDbContext context, UserManager<User> userManager)
+        public CommentsController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         // GET: Comments/Details/5

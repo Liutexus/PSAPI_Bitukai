@@ -1,24 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bitukai.Data;
-using Bitukai.Migrations;
+﻿using Bitukai.Data;
 using Bitukai.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bitukai.Controllers
 {
     public class ComponentsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<User> _userManager;
 
-        public ComponentsController(ApplicationDbContext context, UserManager<User> userManager)
+        public ComponentsController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         public IActionResult Index()
