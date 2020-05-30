@@ -65,5 +65,12 @@ namespace Bitukai.Controllers
 
             return commentsWithAuthors;
         }
+
+        public async Task<IActionResult> GetComponents(int categoryId)
+        {
+            var components = await _context.Components.Where(c => c.CategoryId == categoryId).ToListAsync();
+
+            return View("ComponentList", components);
+        }
     }
 }

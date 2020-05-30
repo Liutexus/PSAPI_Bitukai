@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Component>
+
+@{
+    ViewData["Title"] = "ComponentList";
+}
+
+<h1>ComponentList</h1>
+
+@foreach (var item in Model) {
+    <li>
+        <a asp-action="GetComponent" asp-route-id="@item.Id">@item.Manufacturer @item.Name</a>
+    </li>
+}

@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Component Categories";
+}
+
+@foreach (var item in Model)
+{
+    <li>
+        @Html.ActionLink(@item.Name, "GetComponents", "Components", new {categoryId = @item.Id})
+    </li>
+}

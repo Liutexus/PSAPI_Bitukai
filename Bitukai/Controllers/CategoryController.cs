@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bitukai.Data;
-using Bitukai.Models;
+﻿using Bitukai.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Encodings.Web;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Bitukai.Controllers
@@ -18,30 +13,12 @@ namespace Bitukai.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> GetCategories()
         {
-            return View();
+            var categories =  await _context.Categories.ToListAsync();
+
+            return View("CategoryList", categories);
         }
-
-        public IActionResult GetCategories()
-        {
-            var category =  _context.Categories.ToList();
-
-            return View("~/Views/Home/Index.cshtml", category);
-        }
-        
-        public IActionResult openComponentList(string category)
-        {
-            var categories = _context.Components.Where(b => b.Category.Name == category).ToList();
-
-            if (categories.Count == 0)
-            {
-                ViewBag.message = "There is no components under this category";
-            }
-
-            return View("ComponentList", categories);
-        }
-        
-        
     }
 }
