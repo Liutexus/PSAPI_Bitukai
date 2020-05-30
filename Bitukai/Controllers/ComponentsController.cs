@@ -6,16 +6,21 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bitukai.Migrations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Bitukai.Controllers
 {
     public class ComponentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ComponentsController(ApplicationDbContext context)
+        public ComponentsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -29,6 +34,9 @@ namespace Bitukai.Controllers
 
             ViewData["ComponentExistsError"] = TempData["ComponentExistsError"];
             ViewData["ComponentAdded"] = TempData["ComponentAdded"];
+
+            ViewData["FavExistsError"] = TempData["FavExistsError"];
+            ViewData["FavAdded"] = TempData["FavAdded"];
 
             if (component.AlternativeIds == string.Empty)
             {
@@ -89,6 +97,33 @@ namespace Bitukai.Controllers
             };
 
             return View("CompareComponents", componentsToCompare);
+        }
+
+        public async Task<IActionResult> AddAsFavorite(int componentId)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+                var favoriteExists = await _context.UserFavoriteComponents
+                    .AnyAsync(f => f.UserId == user.Id && f.ComponentId == componentId);
+
+                if (favoriteExists)
+                {
+                    TempData["FavExistsError"] = true;
+                    TempData["FavAdded"] = null;
+                }
+                else
+                {
+                    await _context.UserFavoriteComponents.AddAsync(new UserFavoriteComponent
+                        {ComponentId = componentId, UserId = user.Id});
+                    await _context.SaveChangesAsync();
+                    TempData["FavExistsError"] = null;
+                    TempData["FavAdded"] = true;
+                }
+                return RedirectToAction("GetComponent", new { id = componentId });
+            }
+
+            return Unauthorized();
         }
     }
 }
