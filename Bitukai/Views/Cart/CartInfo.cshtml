@@ -1,0 +1,28 @@
+﻿@using System.Xml.Schema
+@model Cart
+@{
+    ViewData["title"] = "Cart";
+}
+<div>
+    <h4>Cart</h4>
+
+    @{
+        if (ViewData["EmptyCartError"] != null)
+        {
+            <p>Your Cart is Empty.</p>
+        }
+        else
+        {
+            <p>Total Price: @Model.TotalPrice</p>
+
+            <ul>
+                @foreach (var cc in Model.ComponentCarts)
+                {
+                    <li>
+                        @Html.Raw($"{@cc.Component.Manufacturer} {@cc.Component.Name}")
+                    </li>
+                }
+            </ul>
+        }
+    }
+</div>

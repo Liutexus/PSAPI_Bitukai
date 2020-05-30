@@ -29,7 +29,8 @@ namespace Bitukai.Data
                 IntegratedGpu = "Gpu",
                 CoreCount = 4,
                 Socket = "AM4",
-                Tdp = 3.4
+                Tdp = 3.4,
+                Price = 50.23M
             };
             var processors = new List<Processor>()
             {
@@ -46,7 +47,8 @@ namespace Bitukai.Data
                     IntegratedGpu = "Gpu",
                     CoreCount = 8,
                     Socket = "AM4",
-                    Tdp = 3.4
+                    Tdp = 3.4,
+                    Price = 123.23M
                 }
             };
             builder.Entity<Processor>().HasData(processors);
