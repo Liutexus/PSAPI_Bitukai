@@ -8,6 +8,7 @@ namespace Bitukai.Models
         public string Name { get; set; }
         public string Manufacturer { get; set; }
         public string AlternativeIds { get; set; }
+        public decimal Price { get; set; }
         public IEnumerable<Component> Alternatives { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
