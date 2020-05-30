@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Bitukai.Data;
+using Bitukai.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Bitukai.Data;
-using Bitukai.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bitukai.Controllers
 {
@@ -17,13 +16,6 @@ namespace Bitukai.Controllers
         public CommentsController(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        // GET: Comments
-        public IActionResult GetComments(int id)
-        {
-            var comments = _context.Comments.Where(c => c.ComponentId == id).ToList() ;
-            return View("CommentList", comments);
         }
 
         // GET: Comments/Details/5

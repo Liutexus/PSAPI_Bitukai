@@ -1,36 +1,19 @@
-﻿@model IEnumerable<Bitukai.Models.Comment>
+﻿@model IEnumerable<Comment>
 
 @{
-    ViewData["Title"] = "Index";
-}
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-<div class="container">
-    <div class="row">
-        <h2>Comments <div class="pull-right"><a href="#" id="addacomment" class="btn btn-primary">Add a coment</a> </div></h2>
-    </div>
-    <div class="row" id="addcomment" style="display: none;">
-        <form>
-            <textarea class="form-control" placeholder="Comment content..."></textarea><br />
-            <button class="btn btn-primary">Send</button>
-        </form>
-    </div>
-    <hr>
-    @foreach (var item in Model)
+    if (ViewData["EmptyListError"] != null)
     {
-        <div class="row comment">
-            <div class="head">
-                <small><strong class='user'>Diablo25</strong> @item.CreatedAt</small>
-            </div>
-            <p> @item.Description </p>
-        </div>
-
-        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        <h2>There are no comments for this component.</h2>
     }
-    <hr>
-</div>
+    else
+    {
+        <h2>Comments</h2>
 
+        @foreach (var item in Model)
+        {
+            <li>
+                @item.CreatedAt: @item.User.UserName wrote "@item.Description"
+            </li>
+        }
+    }
+}

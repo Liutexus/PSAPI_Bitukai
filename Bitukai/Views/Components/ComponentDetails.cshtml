@@ -1,6 +1,4 @@
-﻿@using Bitukai.Controllers
-
-@model Processor
+﻿@model Processor
 
 @{
     ViewData["title"] = "Details";
@@ -55,6 +53,6 @@
 </div>
 <div>
     @{
-//Html.Action("GetComments", "Comments", new { id = Model.Id });
+        await Html.RenderPartialAsync("../Comments/CommentList", Model.Comments);
     }
 </div>

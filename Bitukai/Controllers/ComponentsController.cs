@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bitukai.Data;
+﻿using Bitukai.Data;
 using Bitukai.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Bitukai.Controllers
 {
@@ -33,6 +33,12 @@ namespace Bitukai.Controllers
             else
             {
                 component.Alternatives = await GetAlternatives(component);
+                component.Comments = await GetCommentsWithAuthors(component);
+
+                if (!component.Comments.Any())
+                {
+                    ViewData["EmptyCommentsError"] = true;
+                }
             }
 
             return View("ComponentDetails", component);
@@ -49,6 +55,12 @@ namespace Bitukai.Controllers
             }
 
             return alternatives;
+        }
+        private async Task<ICollection<Comment>> GetCommentsWithAuthors(Component component)
+        {
+            var commentsWithAuthors = await _context.Comments.Include(c => c.User).Where(c => c.ComponentId == component.Id).ToListAsync();
+
+            return commentsWithAuthors;
         }
     }
 }
