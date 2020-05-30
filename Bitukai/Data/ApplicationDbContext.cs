@@ -50,10 +50,10 @@ namespace Bitukai.Data
                 .WithMany(s => s.FavoriteComponents)
                 .HasForeignKey(sc => sc.UserId);
 
-            builder.Entity<Cart>()
-                .HasOne(c => c.User)
-                .WithOne(u => u.Cart)
-                .HasForeignKey<User>(u => u.Id);
+            builder.Entity<User>()
+                .HasOne(u => u.Cart)
+                .WithOne(c => c.User)
+                .HasForeignKey<User>(u => u.CartId);
 
             base.OnModelCreating(builder);
             Seed.SeedData(builder);

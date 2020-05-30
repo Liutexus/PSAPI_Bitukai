@@ -98,6 +98,8 @@ namespace Bitukai.Data
                     UserId = user.Id
                 });
                 dbContext.SaveChanges();
+                user.CartId = 1;
+                userManager.UpdateAsync(user).Wait();
             }
 
             if (!dbContext.Comments.Any())
