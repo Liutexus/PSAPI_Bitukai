@@ -4,21 +4,25 @@ using Bitukai.Data;
 using Bitukai.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Bitukai.Migrations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bitukai.Controllers
 {
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public CartController(ApplicationDbContext context)
+        public CartController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name); // Testing...
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
             return View("Index", user);
         }
