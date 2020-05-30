@@ -97,9 +97,7 @@ namespace Bitukai.Data
                     TotalPrice = 0.0f,
                     UserId = user.Id
                 });
-                user.CartId = 1;
                 dbContext.SaveChanges();
-                userManager.UpdateAsync(user).Wait();
             }
 
             if (!dbContext.Comments.Any())
