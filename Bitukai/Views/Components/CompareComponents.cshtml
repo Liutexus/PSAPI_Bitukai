@@ -14,3 +14,9 @@
     <p>Tdp: @Model.ElementAt(0).Tdp vs @Model.ElementAt(1).Tdp</p>
     <p>Socket: @Model.ElementAt(0).Socket vs @Model.ElementAt(1).Socket</p>
 </div>
+<p>
+    @Html.ActionLink("Back to original component", "GetComponent", "Components", new { id = Model.ElementAt(0).Id })
+</p>
+<p>
+    @Html.ActionLink("Continue to next component", "GetComponent", "Components", new { id = Model.ElementAt(1).Id })
+</p>
