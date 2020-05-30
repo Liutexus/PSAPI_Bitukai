@@ -1,18 +1,28 @@
-﻿@model Cart
+﻿@using System.Xml.Schema
+@model Cart
 @{
     ViewData["title"] = "Cart";
 }
 <div>
     <h4>Cart</h4>
-    <hr />
-    
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalPrice)
-        </dt>
-        @foreach (var cc in Model.ComponentCarts)
+
+    @{
+        if (ViewData["EmptyCartError"] != null)
         {
-            @Html.Display($"{cc.Component.Manufacturer} {cc.Component.Name}")
+            <p>Your Cart is Empty.</p>
         }
-    </dl>
+        else
+        {
+            <p>Total Price: @Model.TotalPrice</p>
+
+            <ul>
+                @foreach (var cc in Model.ComponentCarts)
+                {
+                    <li>
+                        @Html.Raw($"{@cc.Component.Manufacturer} {@cc.Component.Name}")
+                    </li>
+                }
+            </ul>
+        }
+    }
 </div>

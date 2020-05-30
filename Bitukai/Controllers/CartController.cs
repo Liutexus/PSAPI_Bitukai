@@ -48,6 +48,9 @@ namespace Bitukai.Controllers
                 await _context.SaveChangesAsync();
 
                 var newComponent = await _context.Components.FirstAsync(c => c.Id == componentId);
+                cart.TotalPrice += (float)newComponent.Price;
+                _context.Carts.Update(cart);
+                await _context.SaveChangesAsync();
 
                 TempData["ComponentExistsError"] = null;
                 TempData["ComponentAdded"] = true;
@@ -87,6 +90,11 @@ namespace Bitukai.Controllers
                     .Include(c => c.ComponentCarts)
                     .ThenInclude(cc => cc.Component)
                     .FirstAsync(c => c.Id == user.CartId);
+
+                if (!userCart.ComponentCarts.Any())
+                {
+                    ViewData["EmptyCartError"] = true;
+                }
 
                 return View("CartInfo", userCart);
             }
