@@ -9,7 +9,7 @@ namespace Bitukai.Data
 {
     public static class Seed
     {
-        public static void SeedData(ModelBuilder builder, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static void SeedData(ModelBuilder builder)
         {
             builder.Entity<Category>().HasData(new Category
             {
@@ -52,7 +52,7 @@ namespace Bitukai.Data
             builder.Entity<Processor>().HasData(processors);
         }
 
-        public static async Task SeedUsers(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static void SeedUsers(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (!roleManager.RoleExistsAsync("Customer").Result)
             {

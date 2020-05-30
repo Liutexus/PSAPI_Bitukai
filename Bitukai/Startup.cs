@@ -61,7 +61,7 @@ namespace Bitukai
                 endpoints.MapRazorPages();
             });
 
-            Seed.SeedUsers(userManager, roleManager).Wait();
+            Seed.SeedUsers(userManager, roleManager);
         }
     }
 }
