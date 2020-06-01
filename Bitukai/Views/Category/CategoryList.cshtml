@@ -3,10 +3,10 @@
 @{
     ViewData["Title"] = "Component Categories";
 }
-
-@foreach (var item in Model)
-{
-    <li>
-        @Html.ActionLink(@item.Name, "GetComponents", "Components", new {categoryId = @item.Id})
-    </li>
-}
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item">
+                @Html.ActionLink(@item.Name, "GetComponents", "Components", new { categoryId = @item.Id })
+            </li>
+        }

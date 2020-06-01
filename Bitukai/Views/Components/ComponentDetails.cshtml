@@ -12,7 +12,7 @@
         @{
             if (User.Identity.IsAuthenticated)
             {
-                @Html.ActionLink("Add to Cart", "AddToCart", "Cart", new { componentId = Model.Id });
+                @Html.ActionLink("Add to Cart", "AddToCart", "Cart", new { componentId = Model.Id}, new { @class = "btn btn-primary btn-large", @role = "button" });
             }
         }
         @{
@@ -28,7 +28,7 @@
         @{
             if (User.Identity.IsAuthenticated)
             {
-                @Html.ActionLink("Add as Favorite", "AddAsFavorite", "Components", new { componentId = Model.Id });
+                @Html.ActionLink("Add as Favorite", "AddAsFavorite", "Components", new { componentId = Model.Id }, new { @class = "btn btn-primary btn-large", @role = "button" });
             }
         }
         @{
@@ -43,7 +43,7 @@
         }
         @using (Html.BeginForm("GetOtherComponent", "Components", FormMethod.Post))
         {
-            <input type="submit" value="Compare With:">
+            <input type="submit" value="Compare With:" class="btn btn-warning">
             @Html.DropDownList("ComparisonComponents")
         }
         <dl class="row">

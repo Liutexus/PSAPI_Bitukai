@@ -10,6 +10,7 @@
         <p>System Builder</p>
     </div>
     @foreach (var item in Model)
-    {
-        <a href='@Url.Action("GetCategories", "Category", new {category = item.Name})'>@item.Name</a>}
+        {
+            <a href='@Url.Action("GetCategories", "Category", new {category = item.Name})'>@item.Name</a>
+        }
 </div>

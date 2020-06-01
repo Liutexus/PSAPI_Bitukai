@@ -6,8 +6,11 @@
 
 <h1>ComponentList</h1>
 
-@foreach (var item in Model) {
-    <li>
-        <a asp-action="GetComponent" asp-route-id="@item.Id">@item.Manufacturer @item.Name</a>
-    </li>
-}
+<ul class="list-group">
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item">
+            <a asp-action="GetComponent" asp-route-id="@item.Id">@item.Manufacturer @item.Name</a>
+        </li>
+    }
+</ul>
